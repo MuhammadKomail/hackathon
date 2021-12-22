@@ -64,15 +64,17 @@ export default function UserForm() {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 const uid = user.uid;
-                const postListRef = ref(db, `Booking${uid}`);
+                const postListRef = ref(db, `Bookings/${uid}/`);
                 const newPostRef = push(postListRef);
+                const newkey = newPostRef.key;
                 set(newPostRef, {
                     name,
                     cnic,
                     address,
                     contactNo,
                     noOfPerson,
-                    noOfDayStay
+                    noOfDayStay,
+                    newkey
                 });
 
             } else {

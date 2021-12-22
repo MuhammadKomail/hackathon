@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import PhoneIcon from '@mui/icons-material/Phone';
 import { useNavigate } from 'react-router'
 import { useDispatch } from "react-redux";
-
+import Header from './header2'
 
 export default function Login() {
     const [firstName, setFirstName] = useState()
@@ -61,6 +61,8 @@ export default function Login() {
 
 
     return (
+        <>
+        <Header />
         <div style={{ display: "flex", alignItems: 'center', justifyContent: "center", backgroundPosition: "center",marginTop:"100px" }}>
             <form method="post" action="" className="login" style={{ borderRadius: "30px" }}>
                 <header>SIGN UP FORM</header>
@@ -102,5 +104,7 @@ export default function Login() {
             </form>
 
         </div>
+
+        </>
     )
 }

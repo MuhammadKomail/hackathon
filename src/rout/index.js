@@ -7,7 +7,10 @@ import Index from '../component/index'
 import UserForm from '../component/form'
 import AccountDetail from '../component/AccountDetail'
 import Table from '../component/table'
+import AdminDetail from '../component/AdminDetail'
+import Header from '../component/header'
+// import Coursal from '../component/Coursal'
 
 
-export { Login, SignUp, Dashboard, HotelENtry, Index, UserForm, AccountDetail, Table }
+export { Login, SignUp, Dashboard, HotelENtry, Index, UserForm, AccountDetail, Table, AdminDetail, Header }
 

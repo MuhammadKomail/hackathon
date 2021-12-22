@@ -1,116 +1,99 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
-import { useEffect } from 'react'
-import { useLocation } from "react-router";
-import {
-    auth,
-    onAuthStateChanged,
-    signOut,
-    ref,
-    db,
-    child,
-    get
-} from '../firebase/firebase'
-import Typography from '@mui/material/Typography';
-import logo from '../images/logo.png';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Layout } from 'antd';
-import { useDispatch } from "react-redux";
+import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import Card1 from './Card';
+import logo from '../images/logo.png';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import {
+  auth,
+  onAuthStateChanged,
+  signOut,
+  ref,
+  db,
+  child,
+  get
+} from '../firebase/firebase'
+import { useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
 
+const pages = ['Products', 'Pricing', 'Blog'];
+// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
+const ResponsiveAppBar = () => {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [con, setCon] = React.useState(false);
 
+  const [data, setData] = useState()
+  const logOut = () => {
+    signOut(auth)
+      .then((success) => { console.log(success) })
+      .catch((err) => { console.log(err) })
+  }
+  let navigate = useNavigate()
 
-
-
-
-export default function Dashboard() {
-    
-    const settings = ['Logout'];
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [data, setData] = React.useState([]);
-    const [con, setCon] = React.useState(false);
-    const dispatch = useDispatch()
-
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-      };
-      const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-      };
-    
-      const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-      };
-    
-      const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-      };
-
-    const navigation = useNavigate();
-    const location = useLocation();
-
-    const logOut = () => {
-        signOut(auth)
-            .then((success) => { console.log(success) })
-            .catch((err) => { console.log(err) })
-    }
-    const home = () => {
-        navigation('/')
-      }
-      const form = () => {
-        navigation('/form')
-      }
-      const detail = () => {
-        navigation('/accdet')
-      }
+  useEffect(() => {
     const dbRef = ref(db);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCon(true);
+        const uid = user.uid;
+        get(child(dbRef, `users /${uid}`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log(snapshot.val());
+            setData(snapshot.val())
+
+          } else {
+            console.log("No data available");
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // navigate('/signup')
+      }
+    }
 
 
-    useEffect(() => {
+    );
+  }, [])
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setCon(true);
-                const uid = user.uid;
-                get(child(dbRef, `users /${uid}`)).then((snapshot) => {
-                    if (snapshot.exists()) {
-                        console.log(snapshot.val());
-                        setData(snapshot.val())
-                        dispatch({
-                            type: "DATAFROMDASHBOARD",
-                            ...data
-                        });
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
-                    } else {
-                        console.log("No data available");
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-            }
-        }
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+  const home = () => {
+    navigate('/')
+  }
+  const form = () => {
+    navigate('/form')
+  }
+  const detail = () => {
+    navigate('/accdet')
+  }
 
-        );
-    }, [])
-    return (
-        <>
-
-        
-
-        <AppBar position="static">
+  return (
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -179,7 +162,7 @@ export default function Dashboard() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {con==true?<Avatar alt={data.firstName} src="/static/images/avatar/2.jpg" />:null}
+              {con==true?<Avatar src="/static/images/avatar/2.jpg" />:null}
               </IconButton>
             </Tooltip>
             <Menu
@@ -207,12 +190,6 @@ export default function Dashboard() {
         </Toolbar>
       </Container>
     </AppBar>
-
-            <Card1 />
-
-            {/* <h1>{data.firstName}</h1> */}
-        </>
-    )
-}
-
-
+  );
+};
+export default ResponsiveAppBar;

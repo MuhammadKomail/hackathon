@@ -29,6 +29,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Card1 from './Card';
 import UserForm from './form';
+import Header from './header';
+// import { ResponsiveAppBar } from '../component/header';
 
 const settings = ['Logout'];
 const fnc = ['logoutfnc', 'accountFnc']
@@ -98,55 +100,7 @@ export default function Dashboard() {
         <>
 
 
-            <Layout>
-                <AppBar position="static">
-                    <Container maxWidth="xl">
-                        <Toolbar disableGutters>
-
-                            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                            </Box>
-                            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-
-                            </Box>
-
-                            <Box sx={{ flexGrow: 0 }}>
-                                <Tooltip title="Open settings">
-                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar alt={data.firstName} src="/static/images/avatar/2.jpg" />
-                                    </IconButton>
-                                </Tooltip>
-                               
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
-
-
-                                    <MenuItem>
-                                        <Button  type="primary">Booking Detail</Button>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <Button onClick={logOut} type="primary">Logout</Button>
-                                    </MenuItem>
-                                </Menu>
-
-                            </Box>
-                        </Toolbar>
-                    </Container>
-                </AppBar>
-            </Layout>
+            <Header />
 
             <UserForm />
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Dashboard, HotelENtry, Login, SignUp, Index, UserForm, AccountDetail, Table } from ".";
+import { Dashboard, HotelENtry, Login, SignUp, Index, UserForm, AccountDetail, Table, AdminDetail, Header } from ".";
 
 
 export default function AppRouter() {
@@ -16,6 +16,9 @@ export default function AppRouter() {
                     <Route path="/accdet" element={<AccountDetail />} />
                     <Route path="/entry" element={<HotelENtry />} />
                     <Route path="/table" element={<Table />} />
+                    <Route path="/admin" element={<AdminDetail />} />
+                    <Route path="/header" element={<Header />} />
+                    {/* <Route path="/coursal" element={<Coursal />} /> */}
                     {/* <Route path="/header" element={<Header />} /> */}
                 </Routes>
             </div>

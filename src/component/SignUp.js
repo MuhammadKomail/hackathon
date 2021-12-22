@@ -7,10 +7,11 @@ import {
     signInWithEmailAndPassword
 } from '../firebase/firebase';
 import { useState } from 'react';
-import {  useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { db, onValue, ref } from '../firebase/firebase'
 import { Link } from 'react-router-dom';
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import Header from './header2'
 
 
 
@@ -63,30 +64,34 @@ export default function SignUp() {
 
     }
     return (
-        <div style={{ display: "flex", alignItems: 'center', justifyContent: "center", backgroundPosition: "center", marginTop: "100px" }}>
-            <form method="post" action="" className="login" style={{ borderRadius: "30px" }}>
-                <header>LOGIN FORM</header>
-                <div className='py-5 my-5 text-danger text-bold' style={{color:'red',paddingBottom:'20px'}}>
-                    {error}
-                </div>
-                <div className="field">
-                    <span className='mt-5'>
-                        <EmailIcon style={{ marginTop: "10px" }} />
-                    </span>
-                    <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type='email' />
-                </div>
-                <div className="field">
-                    <span className='mt-5'>
-                        <LockIcon style={{ marginTop: "10px" }} />
-                    </span>
-                    <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type='password' />
-                </div>
-                <Button className='submit' onClick={signUp}>Submit</Button>
-                <div className="">
-                    <p>Already have an Account? <Link className="link" to="/login">SignUp</Link></p>
-                </div>
-            </form>
-        </div>
+        <>
+            <Header />
+
+            <div style={{ display: "flex", alignItems: 'center', justifyContent: "center", backgroundPosition: "center", marginTop: "100px" }}>
+                <form method="post" action="" className="login" style={{ borderRadius: "30px" }}>
+                    <header>LOGIN FORM</header>
+                    <div className='py-5 my-5 text-danger text-bold' style={{ color: 'red', paddingBottom: '20px' }}>
+                        {error}
+                    </div>
+                    <div className="field">
+                        <span className='mt-5'>
+                            <EmailIcon style={{ marginTop: "10px" }} />
+                        </span>
+                        <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type='email' />
+                    </div>
+                    <div className="field">
+                        <span className='mt-5'>
+                            <LockIcon style={{ marginTop: "10px" }} />
+                        </span>
+                        <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type='password' />
+                    </div>
+                    <Button className='submit' onClick={signUp}>Submit</Button>
+                    <div className="">
+                        <p>Already have an Account? <Link className="link" to="/login">SignUp</Link></p>
+                    </div>
+                </form>
+            </div>
+        </>
     )
 }
 

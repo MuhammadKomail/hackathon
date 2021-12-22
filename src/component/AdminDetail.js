@@ -44,8 +44,6 @@ export default function BasicTable() {
     const navigation = useNavigate();
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const edit = (e) => {
 
@@ -57,79 +55,62 @@ export default function BasicTable() {
         let noOfDayStay = prompt('No Of Day Stay')
 
         console.log(e)
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-
-                const uid = user.uid;
-                const dbRef = ref(db, `Bookings/${uid}/${e}`);
-                console.log('found')
-                console.log(e)
-                update(dbRef, {
-                    name,
-                    cnic,
-                    address,
-                    contactNo,
-                    noOfPerson,
-                    noOfDayStay,
-                })
-                    .then(() => {
-                        console.log("data changed successfully");
+        const dbRef = ref(db, `Bookings/`);
+        onValue(dbRef, (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                let childKey = childSnapshot.key;
+                update(ref(db, `Bookings/${childKey}/${e}`), {
+                        name,
+                        cnic,
+                        address,
+                        contactNo,
+                        noOfPerson,
+                        noOfDayStay,
                     })
-                    .catch((err) => {
-                        console.log("unsuccessfully");
-                    })
-            }
-        }
-        );
+                        .then(() => {
+                            console.log("data changed successfully");
+                            navigation('/accdet')
+                        })
+                        .catch((err) => {
+                            console.log("unsuccessfully");
+                        })
+            });
+        })
     }
+
     const dele = (e) => {
         console.log(e)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const uid = user.uid;
-                const dbRef = ref(db, `Bookings/${uid}/${e}`);
-                console.log('found')
-                console.log(e)
-                remove(dbRef)
-                    .then(() => {
-                        console.log("data is deleted");
-                        // navigation('/accdet')
-                    })
-                    .catch((err) => {
-                        console.log("unsuccessfully");
-                    })
-            }
-        }
-        );
+        const dbRef = ref(db, `Bookings/`);
+        onValue(dbRef, (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                let childKey = childSnapshot.key;
+                remove(ref(db, `Bookings/${childKey}/${e}`))
+            });
+        })
+
     }
 
 
     useEffect(() => {
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const uid = user.uid;
-                const dbRef = ref(db, `Bookings/${uid}`);
-                onValue(dbRef, (snapshot) => {
+        const dbRef = ref(db, `Bookings/`);
+        onValue(dbRef, (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                let childKey = childSnapshot.key;
+                let childData = childSnapshot.val();
+                onValue(ref(db, `Bookings/${childKey}/`), (snapshot) => {
                     snapshot.forEach((childSnapshot) => {
-                        let childKey = childSnapshot.key;
-                        let childData = childSnapshot.val();
-                        arr.push(childData)
-                        console.log(childData)
+                        let childKey1 = childSnapshot.key;
+                        let childData1 = childSnapshot.val();
+                        arr.push(childData1)
+                        console.log(childData1)
                     });
-                    console.log(arr)
-                    setData(arr)
                 })
+                setData(arr)
+            });
+        })
 
-
-            }
-        }
-
-        );
-
-
-    },dele)
+    }, [])
     console.log(data)
 
 
@@ -149,15 +130,9 @@ export default function BasicTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-
-
-                    {data != 0 ? data.map((item, index) => <><TableRow><TableCell sx={{ color: 'black' }} key={index} component="th" scope="row">{item.name}</TableCell><TableCell align="right">{item.noOfDayStay}</TableCell><TableCell align="right">{item.cnic}</TableCell><TableCell align="right">{item.address}</TableCell><TableCell align="right">{item.contactNo}</TableCell><TableCell align="right">{item.noOfPerson}</TableCell><TableCell align="right"><Button variant="text" onClick={() => { edit(item.newkey) }}><EditIcon /></Button></TableCell><TableCell align="right"><Button variant="text" onClick={() => { dele(item.newkey) }}><DeleteIcon /></Button></TableCell></TableRow></>) : 'loading'}
-                    {/* {data == 0?<h1>No data Found</h1>:Null} */}
-
-
+                    {data !== 0 ? data.map((item, index) => <TableRow><TableCell sx={{ color: 'black' }} key={index} component="th" scope="row">{item.name}</TableCell><TableCell align="right">{item.noOfDayStay}</TableCell><TableCell align="right">{item.cnic}</TableCell><TableCell align="right">{item.address}</TableCell><TableCell align="right">{item.contactNo}</TableCell><TableCell align="right">{item.noOfPerson}</TableCell><TableCell align="right"><Button variant="text" onClick={() => { edit(item.newkey) }}><EditIcon /></Button></TableCell><TableCell align="right"><Button variant="text" onClick={() => { dele(item.newkey) }}><DeleteIcon /></Button></TableCell></TableRow>) : 'loading'}
                 </TableBody>
             </Table>
-            {data.name}
         </TableContainer>
     );
 }

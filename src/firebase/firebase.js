@@ -19,7 +19,9 @@ import {
     onChildAdded,
     onChildChanged,
     child,
-    query
+    query,
+    update,
+    // remove
 } from "firebase/database";
 
 
@@ -48,12 +50,14 @@ export {
     onAuthStateChanged,
     set,
     push,
-    remove,
+    // remove,
     ref,
     onValue,
     query,
     onChildAdded,
     onChildChanged,
     child,
-    db,get
+    db,get,
+    update,
+    remove
 }
